@@ -1,0 +1,51 @@
+#Importation des bibliothèques nécessaires
+import base64
+from mistralai import Mistral
+import os
+from docx import Document
+from docx.shared import Inches
+
+try:
+    # Vérifier si le fichier existe
+    pdf_path = "skf19.pdf"
+    if not os.path.exists(pdf_path):
+        raise FileNotFoundError(f"Le fichier {pdf_path} n'existe pas.")
+
+    # Lire et encoder le PDF en base64 (nécessaires pour les textes en images)
+    with open(pdf_path, "rb") as f:
+        pdf_bytes = f.read()
+    b64 = base64.b64encode(pdf_bytes).decode('utf-8')
+
+    # Initialiser le client MistralAI
+    client = Mistral(api_key="cOpjsH6Kw7lmiIdWkRX4kv4k7JIyAtX7")
+
+    # Appeler l'API OCR
+    resp = client.ocr.process(
+        model="mistral-ocr-latest",
+        document={
+            "type": "document_url",
+            "document_url": f"data:application/pdf;base64,{b64}"
+        },
+        include_image_base64=True,
+    )
+
+    # Créer un document Word
+    doc = Document()
+    doc.add_heading('Résultat OCR du fichier simo.pdf', 0)
+
+    # Ajouter le contenu markdown de chaque page au document Word
+    for page in resp.pages:
+        doc.add_heading(f'Page {page.index}', level=1)
+        doc.add_paragraph(page.markdown)
+        doc.add_paragraph()  # Ajouter une ligne vide entre les pages
+
+    # Enregistrer le document Word
+    output_file = "output.docx"
+    doc.save(output_file)
+    
+    print(f"Résultat exporté avec succès dans {output_file}")
+
+except FileNotFoundError as e:
+    print(f"Erreur : {e}")
+except Exception as e:
+    print(f"Une erreur s'est produite : {e}")
