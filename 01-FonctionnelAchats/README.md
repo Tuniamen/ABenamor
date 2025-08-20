@@ -30,7 +30,7 @@ Ce rôle s’inscrit dans une dynamique transversale de pilotage, d’optimisati
 - Intégration, formation continue et coaching individuel
 - Gestion de la mobilité interne, des passations et évolutions
 
-### 🔍 3. Contrôle & Qualité
+### 🔍 3. Contrôle
 - Analyse des achats en amont (besoin, budget, fournisseur)
 - Contrôle des dossiers en aval (prix, contrat, conformité)
 - Mise en place de systèmes d’évaluation (acheteurs et fournisseurs)
